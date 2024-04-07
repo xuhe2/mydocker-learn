@@ -10,7 +10,7 @@ import (
 func main() {
 	cmd := exec.Command("sh")
 	cmd.SysProcAttr = &syscall.SysProcAttr{Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWIPC |
-		syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWUSER,
+		syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWUSER | syscall.CLONE_NEWNET,
 		UidMappings: []syscall.SysProcIDMap{
 			{
 				ContainerID: 0,
@@ -25,6 +25,8 @@ func main() {
 				Size:        1,
 			},
 		}} // 设置子进程为新的进程组
+	// 执行指令
+	cmd.Args = []string{"ls"}
 	// cmd.SysProcAttr.Credential = &syscall.Credential{Uid: uint32(1), Gid: uint32(1)} // 设置子进程的UID和GID为1
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
